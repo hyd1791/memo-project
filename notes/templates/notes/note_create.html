@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>메모 작성</h1>
+    <form method="post"></form>
+    {% csrf_token %}<!--  form을 보호하는 코드 -->
+    {{ form.as_p}}
+    <button type="submit">저장</button>
+    </form>
+</body>
+</html>
