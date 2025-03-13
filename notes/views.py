@@ -12,7 +12,7 @@ def note_create(request):
     #사용자 폼을 post형식으로 받아야한다
     #사용자가 메모장을 생성했을때 웹 GET,은 보안위협이 일을수있어 POST로 받아야한다.
     if request.method == 'POST':
-        form = Noteform(request.POST)
+        form = NoteForm(request.POST)
         #폼 형식을 받을 때는 유효성 검사 (보안) 
         if form.is_valid():  #유효성 검사
             form.save() #데이터베이스 저장. 
@@ -26,3 +26,24 @@ def note_create(request):
 def note_detail(request,pk):  #pk는 리스트 하나하나에 부여된 고유숫자
     note = get_object_or_404(Note,pk=pk)
     return render(request, 'notes/note_detail.html',{"note":note})
+
+#메모장 수정
+def note_edit(request, pk):
+    note = get_object_or_404(Note, pk=pk)
+    #메모장을 사용자가 수정을 완료했을 때
+    if request.method == "POST":
+        # 수정
+        form = NoteForm(request.POST, instance=note) 
+        if form.is_valid(): 
+            form.save()
+            return redirect('note_detail',pk=note.pk) 
+    else:
+        form = NoteForm(instance=note)
+        return render(request, "notes/note_create.html", {"form":form})
+    
+
+
+def note_delete(request, pk):
+    note = get_object_or_404(Note,pk=pk)
+    note.delete() #데이터베이스 삭제
+    return redirect("note_list")
